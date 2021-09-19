@@ -1,0 +1,35 @@
+version: '2'
+
+networks:
+  my-network:
+    external:
+      name: my-host-net
+
+services:
+
+    scrapyd-c:
+        build: .
+        volumes:
+            - .:/crawler_test
+            - /usr/local/lib/python3.7/dist-packages
+        ports:
+            - "6800:6800"
+        networks:
+          - my-network
+        tty: true
+        stdin_open: true
+        dns:
+            - 8.8.8.8
+        restart: unless-stopped
+
+
+    webapp:
+      image: amalboukhdhir/flask-crawler
+      networks:
+        - my-network
+      #build: .
+      #ports:
+      #    - "5000:5000"
+      #volumes:
+      #    - .:/crawler_test
+
